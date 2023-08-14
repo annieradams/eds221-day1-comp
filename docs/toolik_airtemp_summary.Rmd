@@ -1,4 +1,4 @@
----
+here?---
 title: "Toolik Station Air Temperature"
 output: html_document
 ---
@@ -18,7 +18,8 @@ library(skimr)
 The data are stored in the `data-raw` subfolder. We'll use `here::here()` to point to it, and read it in using the `readr::read_csv()` function from the `readr` package (part of the `tidyverse`). 
 
 ```{r}
-toolik_weather <- read_csv(here::here("data", "data-raw", "toolik_weather.csv"))
+toolik_weather <- read_csv(here::here("data", "data-raw", "toolik_weather.csv"), na= "#N/A") %>% 
+  janitor::clean_names()
 ```
 
 
@@ -32,6 +33,17 @@ toolik_weather <- read_csv(here::here("data", "data-raw", "toolik_weather.csv"))
 
 
 ## Basic exploration
+
+
+```{r}
+myawesomechart<- ggplot(data = toolik_weather, aes( x= as.factor(month), y = daily_air_temp_mean_c))+
+  geom_jitter(aes(color= daily_air_temp_mean_c))+
+  scale_color_gradient(low="orange", high= "purple")
+  labs(x= " Daily mean air temperatures Celsius", y = "Month", title= "Toolik Station Daily Air Temperature")
+ggsave(here::here("figs","myawesomechart.png"), height = 5, width = 6)
+  
+```
+
 
 ```{r}
 # An overview:
